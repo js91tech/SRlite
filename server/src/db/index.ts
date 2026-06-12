@@ -68,8 +68,16 @@ export function boostLiveSourceWeights(territoryId = DEFAULT_TERRITORY_ID): void
 
 export function configureLiveMode(): { purged: number } {
   const purged = purgeDemoLeads();
-  boostLiveSourceWeights();
-  rescoreAllLeads();
+  try {
+    boostLiveSourceWeights();
+  } catch (err) {
+    console.error("[live mode] could not update territory weights:", err);
+  }
+  try {
+    rescoreAllLeads();
+  } catch (err) {
+    console.error("[live mode] could not rescore leads:", err);
+  }
   return { purged };
 }
 

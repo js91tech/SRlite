@@ -114,6 +114,12 @@ Common fixes:
 - **Build error `better-sqlite3`**: redeploy after latest `nixpacks.toml` is pushed.
 - **Blank page**: check build logs — `npm run build` must complete.
 - **502 / not listening**: ensure start command is `npm start` (set in `railway.toml`).
+- **Healthcheck failed / service unavailable**:
+  1. **Do not set `PORT` manually** in Railway Variables — let Railway inject it.
+  2. Open **Deploy logs** (runtime, not build) and look for `Roadside Radar listening on 0.0.0.0:XXXX`.
+  3. **Settings → Networking → Target port**: leave empty (auto) or match the port in the listen log.
+  4. Ensure volume mount is `/app/server/data` only (not the whole app).
+  5. Redeploy after the latest `Dockerfile` fix (removed hardcoded `PORT=3001`).
 
 ---
 

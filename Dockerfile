@@ -19,7 +19,7 @@ COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/server/dist ./server/dist
 COPY --from=build /app/client/dist ./client/dist
 COPY server/public ./server/public
-RUN mkdir -p server/data
-ENV PORT=3001
-EXPOSE 3001
-CMD ["node", "server/dist/index.js"]
+RUN mkdir -p server/data && chmod 777 server/data
+# Do not set PORT here — Railway injects it at runtime
+EXPOSE 8080
+CMD ["sh", "-c", "echo \"Starting SRlite on PORT=${PORT:-8080}\" && npm start"]

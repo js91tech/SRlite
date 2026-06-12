@@ -23,12 +23,25 @@ import { fetch511Events, normalize511Event } from "./services/poller511.js";
 const PORT = parseInt(process.env.PORT ?? "3001", 10);
 const GA511_API_KEY = process.env.GA511_API_KEY ?? "";
 
+process.on("uncaughtException", (err) => {
+  console.error("[fatal] uncaughtException:", err);
+  process.exit(1);
+});
+process.on("unhandledRejection", (err) => {
+  console.error("[fatal] unhandledRejection:", err);
+  process.exit(1);
+});
+
 if (isLiveMode()) {
-  const { purged } = configureLiveMode();
-  if (purged > 0) {
-    console.log(`Live mode: removed ${purged} demo lead(s)`);
+  try {
+    const { purged } = configureLiveMode();
+    if (purged > 0) {
+      console.log(`Live mode: removed ${purged} demo lead(s)`);
+    }
+    console.log("Live mode enabled — demo leads off; using 511GA + self-report");
+  } catch (err) {
+    console.error("[live mode] setup failed (continuing startup):", err);
   }
-  console.log("Live mode enabled — demo leads off; using 511GA + self-report");
 }
 
 const app = express();
@@ -92,6 +105,12 @@ if (GA511_API_KEY) {
 }
 
 server.listen(PORT, "0.0.0.0", () => {
-  console.log(`Roadside Radar listening on port ${PORT}`);
+  console.log(`Roadside Radar listening on 0.0.0.0:${PORT}`);
+  console.log(`Health check: http://0.0.0.0:${PORT}/api/health`);
   console.log(`Dashboard + API on PORT; WebSocket at /ws`);
+});
+
+server.on("error", (err) => {
+  console.error("[server] failed to bind:", err);
+  process.exit(1);
 });
