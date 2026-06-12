@@ -1,0 +1,28 @@
+---
+description: SRlite project context — push to js91tech/SRlite and deploy on Railway
+alwaysApply: true
+---
+
+# SRlite / Roadside Radar
+
+Read `AGENT-HANDOFF.md` at repo root for full context.
+
+## GitHub
+- Remote: https://github.com/js91tech/SRlite
+- Branch: `main`
+- Push when user asks; never commit `.env`, `*.db`, or `node_modules/`
+
+## Deploy
+- Host: **Railway** (Nixpacks via `railway.toml` + `nixpacks.toml`)
+- Volume required: `/app/server/data` (SQLite)
+- Env: `NODE_ENV=production`, optional `GA511_API_KEY`
+- Health: `/api/health`
+
+## Commands
+- Dev: `npm install && npm run dev`
+- Build: `npm run build`
+- Start: `npm start`
+
+## User goals
+- Dispatch lead-fishing tool for Marietta GA (25mi radius, own fleet)
+- Finding leads outweighs converting them

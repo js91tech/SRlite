@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SRlite / Roadside Radar — Capabilities Breakdown</title>
+  <style>
+    @page { margin: 0.75in; size: letter; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: #1a1a2e;
+      line-height: 1.5;
+      max-width: 8.5in;
+      margin: 0 auto;
+      padding: 0.5in;
+      font-size: 11pt;
+    }
+    h1 { font-size: 22pt; color: #0f3460; margin-bottom: 0.15in; border-bottom: 3px solid #3b82f6; padding-bottom: 0.1in; }
+    h2 { font-size: 14pt; color: #16213e; margin-top: 0.35in; margin-bottom: 0.1in; page-break-after: avoid; }
+    h3 { font-size: 11.5pt; color: #1e3a5f; margin-top: 0.2in; page-break-after: avoid; }
+    .subtitle { font-size: 12pt; color: #4a5568; margin-bottom: 0.25in; }
+    .meta { font-size: 9pt; color: #718096; margin-bottom: 0.3in; }
+    p { margin: 0.08in 0; }
+    ul { margin: 0.08in 0 0.12in 0.2in; padding: 0; }
+    li { margin-bottom: 0.05in; }
+    table { width: 100%; border-collapse: collapse; margin: 0.12in 0; font-size: 10pt; }
+    th, td { border: 1px solid #cbd5e0; padding: 6px 8px; text-align: left; vertical-align: top; }
+    th { background: #edf2f7; font-weight: 600; }
+    .status-done { color: #166534; font-weight: 600; }
+    .status-planned { color: #b45309; font-weight: 600; }
+    .callout {
+      background: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      padding: 0.12in 0.15in;
+      margin: 0.15in 0;
+      font-size: 10.5pt;
+    }
+    .page-break { page-break-before: always; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0.2in; }
+    .footer { margin-top: 0.4in; padding-top: 0.15in; border-top: 1px solid #e2e8f0; font-size: 9pt; color: #718096; text-align: center; }
+    @media print {
+      body { padding: 0; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>SRlite / Roadside Radar</h1>
+<p class="subtitle">Capabilities Breakdown — What This App Will Accomplish When Complete</p>
+<p class="meta">Prepared for js91tech · Market: Marietta, GA (25-mile radius) · GitHub: github.com/js91tech/SRlite · June 2026</p>
+
+<div class="callout">
+  <strong>Executive summary:</strong> SRlite is a real-time dispatch <em>lead-fishing</em> command center for a roadside/tow company that owns its own trucks. It aggregates opportunities from multiple sources, scores them by likelihood of conversion, shows them on a live map alongside your fleet, and lets dispatchers assign the nearest truck in one click — so you find profitable jobs before competitors do.
+</div>
+
+<h2>1. Business Problem It Solves</h2>
+<p>Roadside assistance companies compete on speed and visibility. Leads arrive from many channels — marketplace apps (Honk, Urgently), traffic incidents, social media posts, police rotation lists, inbound calls, and branded help links — often with no single view of what is happening in your territory right now.</p>
+<p>SRlite centralizes those signals into one dispatcher dashboard optimized for <strong>finding leads</strong> (fishing) rather than only managing jobs already won. For a Marietta-based operator covering I-75, I-285, and I-575 corridors, it answers: <em>Where is the next good call, how hot is it, and which truck can get there fastest?</em></p>
+
+<h2>2. Core Capabilities (Complete Vision)</h2>
+
+<h3>2.1 Territory Intelligence</h3>
+<ul>
+  <li>Define service territory by ZIP code and radius (default: 30060, 25 miles)</li>
+  <li>Automatic geocoding when territory settings change</li>
+  <li>Visual territory circle on an interactive map</li>
+  <li>Hot corridor boosting for high-value roadways (I-75, I-285, I-575)</li>
+  <li>Per-source weighting so high-trust channels rank higher</li>
+  <li>Configurable alert thresholds and lead auto-expiry</li>
+</ul>
+
+<h3>2.2 Multi-Source Lead Aggregation</h3>
+<table>
+  <tr><th>Priority</th><th>Source</th><th>What It Delivers</th><th>Status</th></tr>
+  <tr><td>P0</td><td>Driver self-report (<code>/help</code>)</td><td>Branded mobile-friendly form; GPS + phone; instant contactable lead</td><td class="status-done">Built (MVP)</td></tr>
+  <tr><td>P0</td><td>Inbound calls</td><td>Manual or integrated call intake as scored leads</td><td class="status-planned">Planned</td></tr>
+  <tr><td>P0</td><td>Owned fleet GPS</td><td>Live truck positions on map; proximity scoring</td><td class="status-done">Built (demo fleet)</td></tr>
+  <tr><td>P1</td><td>Honk marketplace</td><td>Live payout offers; accept/assign workflow</td><td class="status-planned">Planned</td></tr>
+  <tr><td>P1</td><td>Urgently marketplace</td><td>Same as Honk — marketplace job offers</td><td class="status-planned">Planned</td></tr>
+  <tr><td>P1</td><td>Motor club email</td><td>Parse club dispatch emails into leads</td><td class="status-planned">Planned</td></tr>
+  <tr><td>P2</td><td>Police rotation (Cobb / GSP)</td><td>Manual workflow for rotation call intake</td><td class="status-planned">Planned</td></tr>
+  <tr><td>P3</td><td>511GA traffic API</td><td>Auto-ingest accidents/incidents in territory</td><td class="status-done">Built (with API key)</td></tr>
+  <tr><td>P3</td><td>Social listening (Reddit, X)</td><td>Keyword alerts for stranded motorists</td><td class="status-planned">Planned</td></tr>
+  <tr><td>P3</td><td>Partner referrals</td><td>Referral portal for shops, dealerships, insurers</td><td class="status-planned">Planned</td></tr>
+</table>
+
+<h3>2.3 Intelligent Lead Scoring</h3>
+<p>Every lead receives a composite score (0–100+) so dispatchers work the best opportunities first:</p>
+<ul>
+  <li><strong>Source weight</strong> — marketplace offers and self-reports rank above passive incident feeds</li>
+  <li><strong>Freshness bonus</strong> — newer leads score higher; stale leads decay</li>
+  <li><strong>Contactable bonus</strong> — leads with phone/SMS contact get +15 points</li>
+  <li><strong>Corridor bonus</strong> — incidents on hot interstates get extra points</li>
+  <li><strong>Truck proximity bonus</strong> — nearest available unit within 15–25 min ETA boosts score</li>
+</ul>
+<p>Score breakdown is stored per lead for transparency. High-score alerts trigger sound notifications in the dashboard.</p>
+
+<h3>2.4 Dispatcher Command Center</h3>
+<ul>
+  <li><strong>Live map</strong> — Leaflet map with territory circle, lead pins (color-coded by score), and fleet truck markers</li>
+  <li><strong>Alert tray</strong> — sorted lead list with source labels, time ago, roadway, and nearest truck ETA</li>
+  <li><strong>Fish mode</strong> — open opportunities to pursue (fishing for new business)</li>
+  <li><strong>Jobs mode</strong> — assigned/active work in progress</li>
+  <li><strong>Contactable filter</strong> — show only leads you can call or text immediately</li>
+  <li><strong>Lead detail panel</strong> — full issue description, contact info, score breakdown, quote templates</li>
+  <li><strong>One-click assign</strong> — assign nearest available truck and create a job record</li>
+  <li><strong>Quick stage</strong> — fast-assign using pre-calculated nearest truck</li>
+  <li><strong>Dismiss</strong> — remove low-value or expired leads from the active tray</li>
+</ul>
+
+<div class="page-break"></div>
+
+<h3>2.5 Fleet Management</h3>
+<ul>
+  <li>Track owned trucks: label, type, capabilities, status (available / busy / offline)</li>
+  <li>Real-time position on map (demo: 3 units; future: GPS integration)</li>
+  <li>Automatic nearest-truck calculation with distance and ETA</li>
+  <li>Job creation on assignment with quote amount and customer phone</li>
+</ul>
+
+<h3>2.6 Driver &amp; Customer Touchpoints</h3>
+<ul>
+  <li><strong><code>/help</code> page</strong> — public branded form for stranded motorists (phone + issue + browser GPS)</li>
+  <li><strong>Dashboard “+ Report” button</strong> — dispatcher can open help link to simulate/test intake</li>
+  <li><strong>Quote templates</strong> — pre-built pricing/SMS templates per service type (tow, jump, lockout, etc.)</li>
+  <li><strong>Future: driver mobile app</strong> — accept jobs, navigate, update status from the field</li>
+</ul>
+
+<h3>2.7 Real-Time Operations</h3>
+<ul>
+  <li>WebSocket push alerts — new leads appear instantly without page refresh</li>
+  <li>Audio alert on high-priority incoming leads</li>
+  <li>511GA background poller — continuous scan for new traffic incidents in territory</li>
+  <li>Lead clustering and deduplication via external source IDs</li>
+  <li>Auto-expire stale leads after configurable timeout (default 20 min)</li>
+</ul>
+
+<h2>3. Technical Architecture (Production-Ready)</h2>
+<div class="two-col">
+  <div>
+    <h3>Frontend</h3>
+    <ul>
+      <li>React + Vite + TypeScript</li>
+      <li>Leaflet interactive map</li>
+      <li>WebSocket client for live updates</li>
+      <li>Responsive dispatcher layout</li>
+    </ul>
+  </div>
+  <div>
+    <h3>Backend</h3>
+    <ul>
+      <li>Node.js + Express API</li>
+      <li>SQLite database (MVP)</li>
+      <li>WebSocket server</li>
+      <li>511GA poller service</li>
+      <li>Single-process production deploy</li>
+    </ul>
+  </div>
+</div>
+
+<table>
+  <tr><th>URL (Production)</th><th>Purpose</th></tr>
+  <tr><td><code>/</code></td><td>Dispatcher dashboard</td></tr>
+  <tr><td><code>/help</code></td><td>Driver/customer self-report form</td></tr>
+  <tr><td><code>/api/health</code></td><td>Health check for hosting platform</td></tr>
+  <tr><td><code>/ws</code></td><td>Real-time lead alert WebSocket</td></tr>
+  <tr><td><code>/api/leads</code></td><td>List, create, assign, and update leads</td></tr>
+  <tr><td><code>/api/trucks</code></td><td>Fleet unit positions and status</td></tr>
+  <tr><td><code>/api/territories</code></td><td>Territory config (ZIP, radius, weights)</td></tr>
+</table>
+
+<p><strong>Hosting:</strong> Railway (recommended) with persistent volume at <code>/app/server/data</code> for SQLite. Auto-deploy on push to <code>main</code>. Estimated cost ~$5/month.</p>
+
+<h2>4. MVP vs. Complete Product</h2>
+<table>
+  <tr><th>Feature</th><th>MVP (Today)</th><th>Complete Product</th></tr>
+  <tr><td>Territory map + settings</td><td class="status-done">Yes</td><td>Multi-territory support</td></tr>
+  <tr><td>Lead scoring engine</td><td class="status-done">Yes</td><td>ML-assisted classification</td></tr>
+  <tr><td>Alert tray + Fish/Jobs modes</td><td class="status-done">Yes</td><td>Advanced filters, saved views</td></tr>
+  <tr><td>One-click truck assign</td><td class="status-done">Yes</td><td>Driver app confirmation loop</td></tr>
+  <tr><td>Demo fleet (3 trucks)</td><td class="status-done">Yes</td><td>Live GPS from telematics</td></tr>
+  <tr><td>Self-report /help page</td><td class="status-done">Yes</td><td>White-label per company brand</td></tr>
+  <tr><td>511GA live incidents</td><td class="status-done">Yes (with API key)</td><td>Additional state DOT feeds</td></tr>
+  <tr><td>WebSocket real-time alerts</td><td class="status-done">Yes</td><td>Mobile push notifications</td></tr>
+  <tr><td>Honk / Urgently APIs</td><td>Demo data only</td><td class="status-planned">Live marketplace integration</td></tr>
+  <tr><td>Social keyword listener</td><td>Demo Reddit-style lead</td><td class="status-planned">Live Reddit/X monitoring</td></tr>
+  <tr><td>Partner referral portal</td><td>—</td><td class="status-planned">Partner login + lead submission</td></tr>
+  <tr><td>Driver mobile app</td><td>—</td><td class="status-planned">iOS/Android job acceptance</td></tr>
+  <tr><td>Database</td><td>SQLite</td><td class="status-planned">PostgreSQL + PostGIS at scale</td></tr>
+</table>
+
+<h2>5. Day-in-the-Life Workflow (Complete)</h2>
+<ol>
+  <li><strong>Morning:</strong> Dispatcher opens SRlite dashboard. Territory circle shows Marietta + 25 mi. Three trucks appear as green (available) on the map.</li>
+  <li><strong>Incident arrives:</strong> 511GA poller detects an accident on I-75 northbound inside territory. Lead appears in Alert Tray with score ~65. Map pin drops. Optional sound plays.</li>
+  <li><strong>Marketplace offer:</strong> Honk pushes a $95 tow offer near I-285. Score jumps to 92 (high source weight + corridor + nearby truck). Dispatcher clicks lead, reviews payout and ETA.</li>
+  <li><strong>Self-report:</strong> A motorist submits the branded <code>/help</code> form from their phone. Contactable lead with phone number scores 95+. Dispatcher calls customer, selects quote template, assigns Truck 2.</li>
+  <li><strong>Social signal:</strong> Reddit listener flags “stranded on I-575” post. Lead is contactable via DM link. Dispatcher stages nearest truck.</li>
+  <li><strong>Job mode:</strong> Assigned leads move to Jobs tab. Dispatcher tracks active work while continuing to fish for new opportunities.</li>
+  <li><strong>End of shift:</strong> Dismissed/expired leads clear automatically. Job history retained in database for reporting.</li>
+</ol>
+
+<h2>6. Success Metrics</h2>
+<ul>
+  <li><strong>Time to first contact</strong> — seconds from lead creation to dispatcher action</li>
+  <li><strong>Lead conversion rate</strong> — % of fished leads that become paid jobs</li>
+  <li><strong>Revenue per truck-hour</strong> — marketplace payout + direct job revenue</li>
+  <li><strong>Geographic coverage</strong> — % of territory incidents captured vs. missed</li>
+  <li><strong>Source ROI</strong> — which channels (Honk, 511, social, self-report) produce the best jobs</li>
+</ul>
+
+<h2>7. Roadmap Summary</h2>
+<table>
+  <tr><th>Phase</th><th>Deliverables</th></tr>
+  <tr><td><strong>Phase 1 — MVP</strong> (current)</td><td>Dashboard, scoring, demo data, self-report, 511 poller, WebSocket, Railway deploy</td></tr>
+  <tr><td><strong>Phase 2 — Revenue channels</strong></td><td>Honk + Urgently live APIs, motor club email parser, inbound call logging</td></tr>
+  <tr><td><strong>Phase 3 — Field ops</strong></td><td>Driver mobile app, live GPS telematics, job status updates</td></tr>
+  <tr><td><strong>Phase 4 — Growth</strong></td><td>Social listening, partner referral portal, multi-territory, analytics</td></tr>
+  <tr><td><strong>Phase 5 — Scale</strong></td><td>PostgreSQL/PostGIS, role-based access, billing integrations, custom domains</td></tr>
+</table>
+
+<div class="footer">
+  SRlite / Roadside Radar · Capabilities Breakdown · github.com/js91tech/SRlite · For internal planning use
+</div>
+
+</body>
+</html>
