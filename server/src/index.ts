@@ -10,7 +10,9 @@ import http from "http";
 import router from "./routes/index.js";
 import { initWebSocket, broadcastLeadAlert } from "./websocket.js";
 import {
+  configureLiveMode,
   expireStaleLeads,
+  isLiveMode,
   rescoreAllLeads,
   upsertLead,
   getTerritory,
@@ -20,6 +22,14 @@ import { fetch511Events, normalize511Event } from "./services/poller511.js";
 
 const PORT = parseInt(process.env.PORT ?? "3001", 10);
 const GA511_API_KEY = process.env.GA511_API_KEY ?? "";
+
+if (isLiveMode()) {
+  const { purged } = configureLiveMode();
+  if (purged > 0) {
+    console.log(`Live mode: removed ${purged} demo lead(s)`);
+  }
+  console.log("Live mode enabled — demo leads off; using 511GA + self-report");
+}
 
 const app = express();
 app.use(cors());
@@ -54,11 +64,8 @@ async function poll511() {
       if (!input) continue;
 
       const { lead, isNew } = upsertLead(input, DEFAULT_TERRITORY_ID);
-      if (
-        isNew &&
-        lead.score >= territory.alert_sound_threshold
-      ) {
-        broadcastLeadAlert(lead, true);
+      if (isNew && lead.score >= territory.alert_visible_threshold) {
+        broadcastLeadAlert(lead, lead.score >= territory.alert_sound_threshold);
       } else if (!isNew) {
         broadcastLeadAlert(lead, false);
       }

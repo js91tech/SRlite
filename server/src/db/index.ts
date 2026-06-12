@@ -26,6 +26,53 @@ db.exec(MIGRATION_SQL);
 
 const DEFAULT_TERRITORY_ID = "territory_marietta_25";
 
+const DEMO_EXTERNAL_IDS = ["HNK-DEMO-001", "reddit-demo-001", "511-DEMO-001"];
+
+export function isLiveMode(): boolean {
+  if (process.env.SEED_DEMO_DATA === "true") return false;
+  return (
+    process.env.LIVE_MODE === "true" ||
+    process.env.NODE_ENV === "production" ||
+    Boolean(process.env.GA511_API_KEY)
+  );
+}
+
+function shouldSeedDemoData(): boolean {
+  if (process.env.SEED_DEMO_DATA === "true") return true;
+  if (process.env.SEED_DEMO_DATA === "false") return false;
+  return !isLiveMode();
+}
+
+export function purgeDemoLeads(): number {
+  const placeholders = DEMO_EXTERNAL_IDS.map(() => "?").join(", ");
+  const result = db
+    .prepare(
+      `DELETE FROM leads WHERE source_external_id LIKE '%-DEMO-%' OR source_external_id IN (${placeholders})`
+    )
+    .run(...DEMO_EXTERNAL_IDS);
+  return result.changes;
+}
+
+export function boostLiveSourceWeights(territoryId = DEFAULT_TERRITORY_ID): void {
+  const territory = getTerritory(territoryId);
+  const weights = {
+    ...territory.source_weights,
+    gdot_511: 78,
+    self_report: 92,
+  };
+  db.prepare("UPDATE territories SET source_weights = ? WHERE id = ?").run(
+    JSON.stringify(weights),
+    territoryId
+  );
+}
+
+export function configureLiveMode(): { purged: number } {
+  const purged = purgeDemoLeads();
+  boostLiveSourceWeights();
+  rescoreAllLeads();
+  return { purged };
+}
+
 const MARIETTA_TERRITORY: Territory = {
   id: DEFAULT_TERRITORY_ID,
   name: "Marietta Primary",
@@ -234,7 +281,9 @@ function seedIfEmpty() {
     "This is Roadside Radar Dispatch. We can reach you in ~{{eta}} min. Flatbed tow: ${{price}}. Reply YES to dispatch."
   );
 
-  seedDemoLeads();
+  if (shouldSeedDemoData()) {
+    seedDemoLeads();
+  }
 }
 
 function seedDemoLeads() {

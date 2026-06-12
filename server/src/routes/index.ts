@@ -5,6 +5,7 @@ import {
   getLead,
   getQuoteTemplates,
   getTerritory,
+  isLiveMode,
   listLeads,
   listTerritories,
   listTrucks,
@@ -21,7 +22,22 @@ import { broadcastLeadAlert, broadcastLeadsRefresh } from "../websocket.js";
 const router = Router();
 
 router.get("/health", (_req, res) => {
-  res.json({ ok: true, at: new Date().toISOString() });
+  const ga511Key = process.env.GA511_API_KEY ?? "";
+  res.json({
+    ok: true,
+    at: new Date().toISOString(),
+    live_mode: isLiveMode(),
+    poller_511: {
+      enabled: Boolean(ga511Key),
+      interval_seconds: 60,
+    },
+    lead_sources: {
+      gdot_511: Boolean(ga511Key) ? "live" : "disabled",
+      self_report: "live",
+      honk: "demo_only",
+      social: "demo_only",
+    },
+  });
 });
 
 router.get("/territories", (_req, res) => {

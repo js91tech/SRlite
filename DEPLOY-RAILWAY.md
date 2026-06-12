@@ -58,10 +58,30 @@ Without this, your SQLite database resets on every redeploy.
 
    | Variable | Value | Required |
    |----------|-------|----------|
-   | `NODE_ENV` | `production` | Yes |
-   | `GA511_API_KEY` | your 511GA key | No (demo data works without it) |
+   | `NODE_ENV` | `production` | Yes — clears demo leads, enables live mode |
+   | `GA511_API_KEY` | your 511GA key | Yes for live 511 incidents |
+   | `LIVE_MODE` | `true` | Optional (redundant if `NODE_ENV=production`) |
 
 3. Railway automatically sets **`PORT`** — do not override it.
+
+#### Get a 511GA API key (live traffic incidents)
+
+1. Open https://511ga.org/developers/doc
+2. Register / sign in and create an API key
+3. Paste the key into Railway as `GA511_API_KEY`
+4. Redeploy — the poller runs every **60 seconds** and ingests accidents inside your territory
+
+#### Live lead sources after setup
+
+| Source | Status |
+|--------|--------|
+| **511GA** | Live when `GA511_API_KEY` is set |
+| **Driver self-report** (`/help`) | Always live |
+| **Honk / Reddit** | Demo only (not connected yet) |
+
+Demo leads (`HNK-DEMO-001`, etc.) are **removed automatically** on startup when `NODE_ENV=production`.
+
+Verify: `https://YOUR-URL/api/health` should show `"live_mode": true` and `"poller_511": { "enabled": true }`.
 
 ---
 
